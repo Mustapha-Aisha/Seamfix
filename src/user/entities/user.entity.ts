@@ -17,7 +17,7 @@ import {
   export class UserEntity{
     
     @PrimaryGeneratedColumn({name: 'id'})
-    id: number;
+    id: string;
   
     @Column({name: 'username',  unique: true })
     username: string;
