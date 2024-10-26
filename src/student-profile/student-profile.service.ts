@@ -100,14 +100,6 @@ export class StudentProfileService implements StudentProfileServiceInterface {
       );
     }
 
-    // Check if studentId in DTO matches the current studentId
-    if (
-      updateStudentProfileDto.studentId &&
-      updateStudentProfileDto.studentId !== studentProfile.studentId
-    ) {
-      throw new ForbiddenException('Student ID cannot be modified');
-    }
-
     // Check email uniqueness if being updated
     if (
       updateStudentProfileDto.email &&

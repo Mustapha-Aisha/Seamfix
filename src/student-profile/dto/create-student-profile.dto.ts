@@ -27,11 +27,6 @@ export class CreateStudentProfileDto {
   @IsString()
   password: string;
 
-  @ApiProperty({ description: 'Student ID number' })
-  @IsOptional()
-  @IsString()
-  studentId?: string;
-
   @ApiPropertyOptional({ description: "Student's date of birth" })
   @IsOptional()
   @IsDate()
