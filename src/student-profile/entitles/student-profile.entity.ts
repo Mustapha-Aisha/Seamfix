@@ -22,7 +22,7 @@ export class Student {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true }) // Added unique constraint
+  @Column({ unique: true })
   studentId: string;
 
   @Column()
@@ -31,10 +31,10 @@ export class Student {
   @Column()
   lastName: string;
 
-  @Column({ unique: true }) // Added unique constraint
+  @Column({ unique: true })
   email: string;
 
-  @Column() // Removed nullable
+  @Column()
   password: string;
 
   @Column({
