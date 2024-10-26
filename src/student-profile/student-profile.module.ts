@@ -6,17 +6,9 @@ import { Student } from './entitles/student-profile.entity';
 import { UserEntity } from '../user/entities/user.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Student]),
-    TypeOrmModule.forFeature([UserEntity]),
-  ],
+  imports: [TypeOrmModule.forFeature([Student, UserEntity])],
   controllers: [StudentProfileController],
-  providers: [
-    {
-      provide: StudentProfileService,
-      useClass: StudentProfileService,
-    },
-  ],
+  providers: [StudentProfileService],
   exports: [StudentProfileService],
 })
 export class StudentProfileModule {}

@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../user/entities/user.entity';
 import { CreateStudentProfileDto } from './dto/create-student-profile.dto';
-import { StudentProfileServiceInterface } from './interfaces/student-profile-service.interface';
+import { StudentProfileServiceInterface } from './interfaces/student-profile.service.interface';
 import { UpdateStudentProfileDto } from './dto/update-student-profile.dto';
 import * as bcrypt from 'bcrypt';
 import { Student } from './entitles/student-profile.entity';
@@ -57,7 +57,7 @@ export class StudentProfileService implements StudentProfileServiceInterface {
 
     const studentProfile = this.studentRepo.create({
       ...createStudentProfileDto,
-      studentId, // Add the generated studentId
+      studentId,
       user,
       password: await this.hashPassword(createStudentProfileDto.password),
     });
