@@ -14,6 +14,7 @@ import * as bcrypt from 'bcrypt';
 import { CreateStudentProfileDto } from '../student-profile/dto/create-student-profile.dto';
 import { StaffProfileServiceInterface } from './interfaces/staff-profile.service.interface';
 import { UpdateStaffProfileDto } from './dto/update-staff-profile-dto';
+import { DeleteResponseInterface } from './interfaces/DeleteResponse.interface';
 
 @Injectable()
 export class StaffProfileService implements StaffProfileServiceInterface {
@@ -167,8 +168,6 @@ export class StaffProfileService implements StaffProfileServiceInterface {
       },
     });
 
-    console.log('Retrieved Staff Profiles:', staffProfile);
-
     if (!staffProfile) {
       throw new NotFoundException(
         'Student profile not found or you do not have permission to view it',
@@ -178,7 +177,10 @@ export class StaffProfileService implements StaffProfileServiceInterface {
     return staffProfile;
   }
 
-  async deleteStaffProfile(userId: number, staffId: string): Promise<void> {
+  async deleteStaffProfile(
+    userId: number,
+    staffId: string,
+  ): Promise<DeleteResponseInterface> {
     const user = await this.userRepository.findOne({
       where: { id: userId },
     });
@@ -210,6 +212,11 @@ export class StaffProfileService implements StaffProfileServiceInterface {
     }
 
     await this.staffRepository.remove(studentProfile);
+
+    return {
+      success: true,
+      message: `Staff profile with ID ${staffId} has been successfully deleted`,
+    };
   }
 
   private async hashPassword(password: string): Promise<string> {

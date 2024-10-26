@@ -80,7 +80,7 @@ export class StaffProfileController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getStaffProfiles(@Param('userId') userId: number) {
-    await this.staffProfileService.getStaffProfiles(userId);
+    return await this.staffProfileService.getStaffProfiles(userId);
   }
 
   @Get(':userId/staff/:staffId')
@@ -98,7 +98,7 @@ export class StaffProfileController {
     @Param('userId') userId: number,
     @Param('staffId') staffId: string,
   ) {
-    await this.staffProfileService.getStaffProfile(userId, staffId);
+    return await this.staffProfileService.getStaffProfile(userId, staffId);
   }
 
   @Delete(':userId/staff/:staffId')
@@ -116,6 +116,6 @@ export class StaffProfileController {
     @Param('userId') userId: number,
     @Param('staffId') staffId: string,
   ) {
-    await this.staffProfileService.deleteStaffProfile(userId, staffId);
+    return await this.staffProfileService.deleteStaffProfile(userId, staffId);
   }
 }
