@@ -14,7 +14,7 @@ import * as bcrypt from 'bcrypt';
 import { CreateStudentProfileDto } from '../student-profile/dto/create-student-profile.dto';
 import { StaffProfileServiceInterface } from './interfaces/staff-profile.service.interface';
 import { UpdateStaffProfileDto } from './dto/update-staff-profile-dto';
-import { DeleteResponseInterface } from './interfaces/DeleteResponse.interface';
+import { StaffDeleteResponseInterface } from './interfaces/staff-delete-response.interface';
 
 @Injectable()
 export class StaffProfileService implements StaffProfileServiceInterface {
@@ -180,7 +180,7 @@ export class StaffProfileService implements StaffProfileServiceInterface {
   async deleteStaffProfile(
     userId: number,
     staffId: string,
-  ): Promise<DeleteResponseInterface> {
+  ): Promise<StaffDeleteResponseInterface> {
     const user = await this.userRepository.findOne({
       where: { id: userId },
     });

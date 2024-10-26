@@ -1,7 +1,7 @@
 import { CreateStaffProfileDto } from '../dto/create-staff-profile.dto';
 import { Staff } from '../entities/staff-profile.entity';
 import { UpdateStaffProfileDto } from '../dto/update-staff-profile-dto';
-import { DeleteResponseInterface } from './DeleteResponse.interface';
+import { StaffDeleteResponseInterface } from './staff-delete-response.interface';
 
 export interface StaffProfileServiceInterface {
   createStaffProfile(
@@ -22,5 +22,5 @@ export interface StaffProfileServiceInterface {
   deleteStaffProfile(
     userId: number,
     staffId: string,
-  ): Promise<DeleteResponseInterface>;
+  ): Promise<StaffDeleteResponseInterface>;
 }

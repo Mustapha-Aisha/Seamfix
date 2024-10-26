@@ -13,7 +13,7 @@ import { StudentProfileServiceInterface } from './interfaces/student-profile.ser
 import { UpdateStudentProfileDto } from './dto/update-student-profile.dto';
 import * as bcrypt from 'bcrypt';
 import { Student } from './entitles/student-profile.entity';
-import { DeleteResponseInterface } from './interfaces/DeleteResponse.interface';
+import { StudentDeleteResponseInterface } from './interfaces/student-delete-response.interface';
 
 @Injectable()
 export class StudentProfileService implements StudentProfileServiceInterface {
@@ -183,7 +183,7 @@ export class StudentProfileService implements StudentProfileServiceInterface {
   async deleteStudentProfile(
     userId: number,
     studentId: string,
-  ): Promise<DeleteResponseInterface> {
+  ): Promise<StudentDeleteResponseInterface> {
     const user = await this.userRepo.findOne({
       where: { id: userId },
     });

@@ -1,7 +1,7 @@
 import { CreateStudentProfileDto } from '../dto/create-student-profile.dto';
 import { Student } from '../entitles/student-profile.entity';
 import { UpdateStudentProfileDto } from '../dto/update-student-profile.dto';
-import { DeleteResponseInterface } from './DeleteResponse.interface';
+import { StudentDeleteResponseInterface } from './student-delete-response.interface';
 
 export interface StudentProfileServiceInterface {
   createStudentProfile(
@@ -22,5 +22,5 @@ export interface StudentProfileServiceInterface {
   deleteStudentProfile(
     userId: number,
     studentId: string,
-  ): Promise<DeleteResponseInterface>;
+  ): Promise<StudentDeleteResponseInterface>;
 }
