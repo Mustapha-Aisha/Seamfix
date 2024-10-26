@@ -41,14 +41,6 @@ export class StudentProfileService implements StudentProfileServiceInterface {
       );
     }
 
-    const existingStudentId = await this.studentRepo.findOne({
-      where: { studentId: createStudentProfileDto.studentId },
-    });
-
-    if (existingStudentId) {
-      throw new ConflictException('Student ID already exists');
-    }
-
     const existingEmail = await this.studentRepo.findOne({
       where: { email: createStudentProfileDto.email },
     });
@@ -58,11 +50,15 @@ export class StudentProfileService implements StudentProfileServiceInterface {
     }
 
     if (!this.validateRequiredFields(createStudentProfileDto)) {
-      throw new BadRequestException('All fields are required');
+      throw new BadRequestException('All required fields must be provided');
     }
+
+    // Generate a unique student ID
+    const studentId = await this.ensureUniqueStudentId();
 
     const studentProfile = this.studentRepo.create({
       ...createStudentProfileDto,
+      studentId, // Add the generated studentId
       user,
       password: await this.hashPassword(createStudentProfileDto.password),
     });
@@ -234,10 +230,34 @@ export class StudentProfileService implements StudentProfileServiceInterface {
       dto.lastName &&
       dto.email &&
       dto.password &&
-      dto.studentId &&
       dto.dateOfBirth &&
       dto.address &&
       dto.phoneNumber
     );
+  }
+
+  private generateStudentId(): string {
+    const year = new Date().getFullYear().toString().slice(-2);
+    const randomDigits = Math.floor(Math.random() * 10000)
+      .toString()
+      .padStart(4, '0');
+    return `STU${year}${randomDigits}`;
+  }
+
+  private async ensureUniqueStudentId(): Promise<string> {
+    let studentId: string;
+    let isUnique = false;
+
+    while (!isUnique) {
+      studentId = this.generateStudentId();
+      const existing = await this.studentRepo.findOne({
+        where: { studentId },
+      });
+      if (!existing) {
+        isUnique = true;
+      }
+    }
+
+    return studentId;
   }
 }
