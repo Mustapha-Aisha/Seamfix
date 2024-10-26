@@ -13,4 +13,10 @@ export interface StudentProfileServiceInterface {
     studentId: string,
     updateStudentProfileDto: UpdateStudentProfileDto,
   ): Promise<Student>;
+
+  getStudentProfiles(userId: number): Promise<Student[]>;
+
+  getStudentProfile(userId: number, studentId: string): Promise<Student>;
+
+  deleteStudentProfile(userId: number, studentId: string): Promise<void>;
 }

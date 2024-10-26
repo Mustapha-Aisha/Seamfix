@@ -22,7 +22,7 @@ export class Student {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true }) // Added unique constraint
   studentId: string;
 
   @Column()
@@ -31,10 +31,10 @@ export class Student {
   @Column()
   lastName: string;
 
-  @Column({ nullable: true })
+  @Column({ unique: true }) // Added unique constraint
   email: string;
 
-  @Column({ nullable: true })
+  @Column() // Removed nullable
   password: string;
 
   @Column({
@@ -44,17 +44,16 @@ export class Student {
   })
   enrollmentStatus: EnrollmentStatus;
 
-  @Column({ nullable: true })
+  @Column()
   dateOfBirth: Date;
 
-  @Column({ nullable: true })
+  @Column()
   address: string;
 
-  @Column({ nullable: true })
+  @Column()
   phoneNumber: string;
 
-  @OneToOne(() => UserEntity, { eager: true })
-  @JoinColumn()
+  @ManyToOne(() => UserEntity, { eager: true })
   user: UserEntity;
 
   @CreateDateColumn()
