@@ -13,6 +13,7 @@ import { CreateStaffProfileDto } from './dto/create-staff-profile.dto';
 import * as bcrypt from 'bcrypt';
 import { CreateStudentProfileDto } from '../student-profile/dto/create-student-profile.dto';
 import { StaffProfileServiceInterface } from './interfaces/staff-profile.service.interface';
+import { UpdateStaffProfileDto } from './dto/update-staff-profile-dto';
 
 @Injectable()
 export class StaffProfileService implements StaffProfileServiceInterface {
@@ -64,6 +65,151 @@ export class StaffProfileService implements StaffProfileServiceInterface {
     });
 
     return await this.staffRepository.save(staffProfile);
+  }
+
+  async updateStaffProfile(
+    userId: number,
+    staffId: string,
+    updateStaffProfileDto: UpdateStaffProfileDto,
+  ): Promise<Staff> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.role !== 'admin') {
+      throw new UnauthorizedException(
+        'Only admin users can update staff profiles',
+      );
+    }
+
+    // Find staff profile created by the admin
+    const staffProfile = await this.staffRepository.findOne({
+      where: { staffId, user: { id: userId } },
+    });
+
+    if (!staffProfile) {
+      throw new NotFoundException(
+        'Staff profile not found or you do not have permission to update it',
+      );
+    }
+
+    // Check email uniqueness if  being updated
+    if (
+      updateStaffProfileDto.email &&
+      updateStaffProfileDto.email !== staffProfile.email
+    ) {
+      const existingEmail = await this.staffRepository.findOne({
+        where: { email: updateStaffProfileDto.email },
+      });
+
+      if (existingEmail) {
+        throw new ConflictException('Email already exists');
+      }
+    }
+
+    // Update staff profile
+    const updatedStaffProfile = {
+      ...staffProfile,
+      ...updateStaffProfileDto,
+      staffId: staffProfile.staffId,
+      password: updateStaffProfileDto.password
+        ? await this.hashPassword(updateStaffProfileDto.password)
+        : staffProfile.password,
+    };
+
+    return await this.staffRepository.save(updatedStaffProfile);
+  }
+
+  async getStaffProfiles(userId: number): Promise<Staff[]> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.role !== 'admin') {
+      throw new BadRequestException(
+        'Only admin users can view all student profiles',
+      );
+    }
+
+    return await this.staffRepository.find({
+      where: { user: { id: userId } },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async getStaffProfile(userId: number, staffId: string): Promise<Staff> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.role !== 'admin') {
+      throw new BadRequestException(
+        'Only admin users can view student profiles',
+      );
+    }
+
+    const staffProfile = await this.staffRepository.findOne({
+      where: {
+        staffId,
+        user: { id: userId },
+      },
+    });
+
+    console.log('Retrieved Staff Profiles:', staffProfile);
+
+    if (!staffProfile) {
+      throw new NotFoundException(
+        'Student profile not found or you do not have permission to view it',
+      );
+    }
+
+    return staffProfile;
+  }
+
+  async deleteStaffProfile(userId: number, staffId: string): Promise<void> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.role !== 'admin') {
+      throw new BadRequestException(
+        'Only admin users can delete student profiles',
+      );
+    }
+
+    // Check if the student profile exists and belongs to this admin
+    const studentProfile = await this.staffRepository.findOne({
+      where: {
+        staffId,
+        user: { id: userId },
+      },
+    });
+
+    console.log('Retrieved Student Profiles:', studentProfile);
+
+    if (!studentProfile) {
+      throw new NotFoundException(
+        'Student profile not found or you do not have permission to delete it',
+      );
+    }
+
+    await this.staffRepository.remove(studentProfile);
   }
 
   private async hashPassword(password: string): Promise<string> {

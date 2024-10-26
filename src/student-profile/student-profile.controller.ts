@@ -10,6 +10,7 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateStudentProfileDto } from './dto/create-student-profile.dto';
 import { StudentProfileService } from './student-profile.service';
+import { UpdateStudentProfileDto } from './dto/update-student-profile.dto';
 
 @ApiTags('Student Profile')
 @Controller('student-profile')
@@ -51,12 +52,12 @@ export class StudentProfileController {
   async updateStudentProfile(
     @Param('userId') userId: number,
     @Param('studentId') studentId: string,
-    @Body() createStudentProfileDto: CreateStudentProfileDto,
+    @Body() updateStudentProfileDto: UpdateStudentProfileDto,
   ) {
     return await this.studentProfileService.updateStudentProfile(
       userId,
       studentId,
-      createStudentProfileDto,
+      updateStudentProfileDto,
     );
   }
 
