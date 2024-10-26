@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -35,7 +36,7 @@ export class StudentProfileService implements StudentProfileServiceInterface {
     }
 
     if (user.role !== 'admin') {
-      throw new BadRequestException(
+      throw new UnauthorizedException(
         'Only admin users can create student profiles',
       );
     }
