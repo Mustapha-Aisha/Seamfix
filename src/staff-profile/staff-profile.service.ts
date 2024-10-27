@@ -23,7 +23,8 @@ export class StaffProfileService implements StaffProfileServiceInterface {
     private readonly staffRepository: Repository<Staff>,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-  ) {}
+  ) {
+  }
 
   async createStaffProfile(
     userId: number,
@@ -236,7 +237,7 @@ export class StaffProfileService implements StaffProfileServiceInterface {
     );
   }
 
-  private generateStudentId(): string {
+  private generateStaffId(): string {
     const year = new Date().getFullYear().toString().slice(-2);
     const randomDigits = Math.floor(Math.random() * 10000)
       .toString()
@@ -249,7 +250,7 @@ export class StaffProfileService implements StaffProfileServiceInterface {
     let isUnique = false;
 
     while (!isUnique) {
-      staffId = this.generateStudentId();
+      staffId = this.generateStaffId();
       const existing = await this.staffRepository.findOne({
         where: { staffId: staffId },
       });
