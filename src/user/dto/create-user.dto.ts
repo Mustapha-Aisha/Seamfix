@@ -17,3 +17,27 @@ export class CreateUserDto {
   @IsNotEmpty()
   role: string;
 }
+
+export class LoginDto {
+  @IsString()
+  @IsNotEmpty()
+  username: string;
+
+  @IsEmail()
+  @IsNotEmpty()
+  password: string;
+}
+
+export class passwordResetDto {
+  @IsString()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+  
+  @IsString()
+  @IsNotEmpty()
+  confirmPassword: string;
+} 
